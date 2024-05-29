@@ -18,8 +18,9 @@
   
   .party-container th, .party-container td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 5px;
     text-align: center;
+    width : 30px;
   }
   
   .party-container th {
