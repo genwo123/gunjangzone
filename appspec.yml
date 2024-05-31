@@ -3,11 +3,11 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/JoMyeong
+    destination: /home/ubuntu/front
     overwrite: yes
 file_exists_behavior: OVERWRITE
 permissions:
-  - object: /home/ubuntu/JoMyeong
+  - object: /home/ubuntu/front
     owner: ubuntu
     group: ubuntu
     mode: 755
