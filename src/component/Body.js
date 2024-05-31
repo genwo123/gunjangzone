@@ -9,6 +9,11 @@ const Body = () => {
       <div className="rtc-wrapper">
         <RTC />
       </div>
+      <br/>
+      테스트
+      <br/>
+      2차 테스트
+      <br/>
       <div className="party-wrapper">
         <Party />
       </div>
