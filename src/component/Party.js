@@ -1,45 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import '../CSS/Party.css'; // 스타일 파일을 import
+import '../CSS/Party.css';
+
+const dummyData = [
+  {
+    nickname: "유저1",
+    class: "배틀마스터",
+    position: "딜러",
+    pass: "O"
+  },
+  {
+    nickname: "유저2",
+    class: "소서리스",
+    position: "딜러",
+    pass: "X"
+  },
+  {
+    nickname: "유저3",
+    class: "기공사",
+    position: "딜러",
+    pass: "O"
+  },
+  {
+    nickname: "유저4",
+    class: "워로드",
+    position: "딜러",
+    pass: "X"
+  },
+  {
+    nickname: "유저5",
+    class: "블레이드",
+    position: "딜러",
+    pass: "O"
+  },
+  {
+    nickname: "유저6",
+    class: "홀리나이트",
+    position: "서포터",
+    pass: "X"
+  },
+  {
+    nickname: "유저7",
+    class: "홀리나이트",
+    position: "서포터",
+    pass: "O"
+  },
+  {
+    nickname: "유저8",
+    class: "바드",
+    position: "서포터",
+    pass: "X"
+  }
+];
+
+const synergyData = {
+  "치명타 적중률": ["배틀마스터", "건슬링어", "아르카나", "데빌헌터", "스트라이커", "기상술사"],
+  "받는 피해 증가": ["소울이터", "소서리스", "버서커", "데모닉", "호크아이", "브레이커", "인파이터", "슬레이어"],
+  "공격력 증가": ["기공사", "스카우터", "홀리나이트", "바드", "도화가"],
+  "방어력 감소": ["워로드", "서머너", "블래스터", "디스트로이어", "리퍼"],
+  "백헤드 피해 증가": ["워로드", "블레이드"],
+  "치명타 피해량 증가": ["창술사"]
+};
 
 const Party = () => {
   const [id, setId] = useState([]);
 
   useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-
-    fetch("https://jsonplaceholder.typicode.com/posts", requestOptions)
-      .then(response => response.json())
-      .then(result => setId(result))
-      .catch(error => console.log('error', error));
+    setId(dummyData);
   }, []);
 
-  // 표의 행과 열 개수 설정
-  const rows = 8;
-  const cols = 4;
-
-  // 테이블에 들어갈 셀 수 계산
-  const totalCells = rows * cols;
-
-  // 행을 렌더링하는 함수
   const renderRows = () => {
-    let rows = [];
-    for (let i = 0; i < totalCells; i += cols) {
-      let rowCells = [];
-      for (let j = 0; j < cols; j++) {
-        const member = id[i + j] || { userId: ' - ', id: ' - ' }; // API 데이터 없을 경우 빈 값 설정
-        rowCells.push(
-          <React.Fragment key={i + j}>
-            <td>{member.userId}</td>
-            <td>{member.id}</td>
-          </React.Fragment>
-        );
-      }
-      rows.push(<tr key={i}>{rowCells}</tr>);
-    }
-    return rows;
+    return id.map((member, index) => {
+      const synergyList = Object.keys(synergyData).reduce((acc, key) => {
+        if (synergyData[key].includes(member.class)) {
+          acc.push(key);
+        }
+        return acc;
+      }, []).join(', ');
+      
+      return (
+        <tr key={index}>
+          <td>{member.nickname}</td>
+          <td>{member.class}</td>
+          <td>{member.position}</td>
+          <td>{member.pass}</td>
+          <td>{synergyList}</td>
+        </tr>
+      );
+    });
   };
 
   return (
@@ -49,13 +96,10 @@ const Party = () => {
         <thead>
           <tr>
             <th>닉네임</th>
-            <th>군장검사통과</th>
-            <th>닉네임</th>
-            <th>군장검사통과</th>
-            <th>닉네임</th>
-            <th>군장검사통과</th>
-            <th>닉네임</th>
-            <th>군장검사통과</th>
+            <th>클래스</th>
+            <th>포지션</th>
+            <th>합/불 여부</th>
+            <th>시너지</th>
           </tr>
         </thead>
         <tbody>
