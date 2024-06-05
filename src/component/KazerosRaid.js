@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../CSS/LegionRaid.css';
 import ekiImg from '../image/baltan.jpg';
-
+//수정중
 const KazerosRaid = () => {
   const [activeTab, setActiveTab] = useState('eki');
   const [selectedOptions, setSelectedOptions] = useState({
