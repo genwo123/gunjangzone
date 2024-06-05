@@ -13,7 +13,7 @@ const LegionRaid = () => {
     battleLevel: [],
     characteristic: [],
     abilityStone: [],
-    tripod: [],
+    skillPoint: [],
     engraving: [],
     equipmentSetEffect: [],
     gem: [],
@@ -28,27 +28,39 @@ const LegionRaid = () => {
 
   const handleOptionClick = (category, option) => {
     setSelectedOptions(prevState => {
-      // 기존에 선택된 옵션들
+      // 현재 선택된 카테고리의 옵션 배열
       const currentOptions = prevState[category];
-      // 선택된 옵션인지 확인
-      const isSelected = currentOptions === option;
-      // 새로운 옵션 선택/해제
-      const newOptions = isSelected ? '' : option;
+      // 현재 클릭된 옵션이 이미 선택되어 있는지 확인
+      const isSelected = currentOptions.includes(option);
+      // 새로운 옵션 배열
+      let newOptions = [];
+  
+      // 현재 클릭된 옵션이 이미 선택되어 있다면 해당 옵션을 제거하고,
+      // 아니라면 새로운 배열에 추가
+      if (isSelected) {
+        newOptions = currentOptions.filter(item => item !== option);
+      } else {
+        newOptions = [option];
+      }
+  
+      // 다른 카테고리의 옵션들은 유지하고 클릭된 옵션만 업데이트
       return { ...prevState, [category]: newOptions };
     });
   };
+  
+  
 
   const options = {
     battleLevel: ['50', '55', '60'],
     characteristic: ['2100 이상', '2200 이상', '2300 이상'],
-    abilityStone: ['유물 어빌리티 스톤', '고대 어빌리티 스톤 I', '고대 어빌리티 스톤 II', '고대 어빌리티 스톤 III', '고대 어빌리티 스톤 IV'],
-    tripod: ['분쇄의 주먹', '분노의 망치', '부러진 뼈'],
-    engraving: ['3333', '33333', '333331', '333322', '333332'],
+    abilityStone: ['유물', '고대 I', '고대 II', '고대 III', '고대 IV'],
+    skillPoint: ['390', '400', '410', '420'],
+    engraving: ['3333', '33333', '333331','333332'],
     equipmentSetEffect: ['1레벨', '2레벨', '3레벨'],
-    gem: ['보석 1', '보석 2'],
-    card: ['알고보면 18', '알고보면 30', '남바절 12', '남바절 30', '세구빛 18', '세구빛 30', '암구빛 18', '암구빛 30', '창의 달인'],
-    elixir: ['엘릭서 X', '엘릭서 35', '엘릭서 40'],
-    transcendence: ['초월 1', '초월 2']
+    gem: ['5', '7', '9', '10'],
+    card: ['알고보면 12', '알고보면 18','알고보면 30', '남바절 12', '세구빛 12', '세구빛 18','세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30'],
+    elixir: ['엘릭서0', '엘릭서 35', '엘릭서 40'],
+    transcendence: ['초월 x', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
   };
 
   const renderTabContent = (tabId) => {
