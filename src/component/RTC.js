@@ -93,10 +93,14 @@ const RTC = () => {
 
   return (
     <div className="rtc-container">
-      <button id="toggleButton" onClick={toggleSharing}>
-        {isSharing ? 'Stop Sharing' : 'Start Sharing'}
-      </button>
-
+      <div className="top-buttons">
+        <button id="toggleButton" onClick={toggleSharing}>
+          {isSharing ? '캡처 중지' : '캡처 시작'}
+        </button>
+        <button className="adjust-position-button">위치 조정</button>
+        <button className="settings-button">설정</button>
+        <button className="performance-button">성능표</button>
+      </div>  
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline className="rtc-video"></video>
         <canvas

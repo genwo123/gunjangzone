@@ -4,31 +4,28 @@
   justify-content: space-between; /* 공간을 균등하게 배분 */
   padding: 20px;
   height: 100vh; /* 전체 화면 높이 */
-  box-sizing: border-box;
+  box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 설정 */
+}
+
+.rtc-wrapper, .party-wrapper {
+  border: 1px solid #ccc;
+  padding: 3px;
+  box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 설정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로 중앙 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  margin: 10px; /* 요소 간의 간격 설정 */
 }
 
 .rtc-wrapper {
-  border: 1px solid #ccc;
-  padding: 3px;
-  box-sizing: border-box;
-  height: 80%; /* 전체 높이를 차지하도록 설정 */
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 중앙 정렬 */
-  align-items: center; /* 중앙 정렬 */
+  width: calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 고려하여 조정 */
+  height: 70%; /* 전체 높이의 50%를 차지 */
 }
 
 .party-wrapper {
-  border: 1px solid #ccc;
-  padding: 3px;
-  box-sizing: border-box;
-  height: 80%; /* 전체 높이를 차지하도록 설정 */
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 중앙 정렬 */
-  align-items: center; /* 중앙 정렬 */
+  width: calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 고려하여 조정 */
+  height: 70%; /* 전체 높이의 50%를 차지 */
 }
 
 .rtc-container {
