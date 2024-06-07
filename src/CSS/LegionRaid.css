@@ -1,9 +1,11 @@
+/* 기본 설정 */
 .tab-container {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
+/* 탭 메뉴 */
 .tab-menu {
   display: flex;
   justify-content: space-around;
@@ -13,19 +15,21 @@
 
 .tab-menu button {
   background-color: #fff;
-  border: none;
-  padding: 10px 15px;
+  border: 2px solid #5a71af; /* 버튼 테두리 추가 */
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  padding: 10px 20px; /* 패딩 증가 */
   cursor: pointer;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px; /* 글자 크기 증가 */
   margin: 5px;
+  transition: background-color 0.3s, color 0.3s; /* 부드러운 색상 전환 */
 }
 
 .tab-menu button img {
   width: 50px;
   height: 50px;
   display: block;
-  margin-bottom: 5px;
+  margin: 0 auto 5px; /* 가운데 정렬 */
 }
 
 .tab-menu button.active {
@@ -33,6 +37,13 @@
   color: white;
 }
 
+/* 호버 효과 추가 */
+.tab-menu button:hover {
+  background-color: #5a71af;
+  color: white;
+}
+
+/* 탭 내용 */
 .tab-content {
   flex: 1;
   padding: 20px;
@@ -46,6 +57,7 @@
   display: block;
 }
 
+/* 스펙 카드 */
 .spec-card {
   display: flex;
   flex-wrap: wrap;
@@ -55,17 +67,21 @@
 .spec-row {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.spec-row label {
-  margin-bottom: 5px;
+.spec-category {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 .checkbox-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  background-color: white;
+  border-radius: 9px;
 }
 
 .checkbox-container {
@@ -73,22 +89,29 @@
   align-items: center;
 }
 
+.checkbox-container :hover{
+  border : none;
+  outline: none;
+}
 .checkbox-container input {
   display: none;
 }
 
 .checkbox-container label {
+  display: block;
   padding: 0.5rem 1rem;
   height: 2.25rem;
   cursor: pointer;
-  
   background-color: #f2f4f6;
-  font-size: 0.75rem;
+  font-size: 0.875rem; /* 글자 크기 증가 */
   color: #383838;
-  border: none;
+  border: 2px solid #5a71af; /* 테두리 추가 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  text-align: center;
 }
 
 .checkbox-container input:checked + label {
-  background-color: #846315;
+  background-color: rgba(17, 138, 132, 0.616);
   color: white;
+  border : none;
 }
