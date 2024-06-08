@@ -109,9 +109,19 @@ const EpicRaid = () => {
     if (!isChecked) {
       return; // 기본 모드일 때는 저장하기 버튼이 작동하지 않음
     }
+  
+    // 각 카테고리별로 하나라도 선택하지 않았으면 기본 옵션들을 모두 선택
+    const updatedOptions = { ...selectedOptions };
+    Object.keys(options).forEach(category => {
+      if (updatedOptions[category].length === 0) {
+        updatedOptions[category] = [...options[category]];
+      }
+    });
+  
     setShowSavePresetModal(true);
+    setSelectedOptions(updatedOptions);
   };
-
+  
   const savePreset = () => {
     if (presetName.trim() === '') {
       return;
@@ -119,6 +129,7 @@ const EpicRaid = () => {
     localStorage.setItem(`${activeTab}-${presetName}`, JSON.stringify(selectedOptions));
     setShowSavePresetModal(false);
   };
+  
 
   const handleReset = () => {
     if (!isChecked) {

@@ -17,7 +17,7 @@
 
 h2 {
   margin: 0;
-  margin-left: 5px; /* 로고와 h2 사이의 간격 줄임 */
+  margin-left: 15px; /* 로고와 h2 사이의 간격 줄임 */
   font-size: 1.5rem; /* 원하는 폰트 크기로 설정 */
 }
 
