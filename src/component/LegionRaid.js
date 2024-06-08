@@ -133,12 +133,12 @@ const LegionRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      baltan: { title: '발탄 스펙 설정' },
-      biakis: { title: '비아키스 스펙 설정' },
-      kuxseiten: { title: '쿠크세이튼 스펙 설정' },
-      avrelshud: { title: '아브렐슈드 스펙 설정' },
-      ilyakan: { title: '일리아칸 스펙 설정' },
-      kame: { title: '카멘 스펙 설정' }
+      baltan: { title: '발탄 스펙' },
+      biakis: { title: '비아키스 스펙' },
+      kuxseiten: { title: '쿠크세이튼 스펙' },
+      avrelshud: { title: '아브렐슈드 스펙' },
+      ilyakan: { title: '일리아칸 스펙' },
+      kame: { title: '카멘 스펙' }
     };
 
     const selectedContent = content[tabId];

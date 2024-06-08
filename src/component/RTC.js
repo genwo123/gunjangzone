@@ -98,8 +98,6 @@ const RTC = () => {
           {isSharing ? '캡처 중지' : '캡처 시작'}
         </button>
         <button className="adjust-position-button">위치 조정</button>
-        <button className="settings-button">설정</button>
-        <button className="performance-button">성능표</button>
       </div>  
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline className="rtc-video"></video>
