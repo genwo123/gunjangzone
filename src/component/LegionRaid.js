@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import '../CSS/LegionRaid.css';
+import '../CSS/RaidStyles.css'
 import baltanImg from '../image/baltan.jpg';
 import biakisImg from '../image/biakis.jpg';
 import kuxseitenImg from '../image/kuxseiten.jpg';
 import avrelshudImg from '../image/avrelshud.jpg';
 import ilyakanImg from '../image/ilyakan.jpg';
 import kameImg from '../image/kame.jpg';
+import styled from 'styled-components';
+import { csvToLocalStorage } from './csvToLocalStorage.js';
+
 
 const LegionRaid = () => {
   const [activeTab, setActiveTab] = useState('baltan');
@@ -22,11 +25,16 @@ const LegionRaid = () => {
     transcendence: []
   });
 
+
   const [presetName, setPresetName] = useState('');
   const [showSavePresetModal, setShowSavePresetModal] = useState(false);
   const [showLoadPresetModal, setShowLoadPresetModal] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState(null);
+  const [isChecked, setIsChecked] = useState(false);
+  const left = '기본';
+  const right = '상세';
 
+  
   const aliasMap = {
     battleLevel: '전투 레벨',
     characteristic: '특성합',
@@ -147,6 +155,21 @@ const LegionRaid = () => {
       <div className="content active">
         <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
+        <ToggleWrapper>
+            <CheckBox
+                type="checkbox"
+                id="toggle"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+            />
+            <ToggleSwitch htmlFor="toggle">
+              <ToggleCircle className={isChecked ? 'checked' : ''} />
+            </ToggleSwitch>
+            <ToggleLabels>
+              <span className={`toggle-left ${isChecked ? 'inactive' : 'active'}`}>{left}</span>
+              <span className={`toggle-right ${isChecked ? 'active' : 'inactive'}`}>{right}</span>
+            </ToggleLabels>
+          </ToggleWrapper>
           <button onClick={handleReset}>초기화</button>
           <div className="preset-dropdown">
             <button onClick={() => setShowLoadPresetModal(true)}>불러오기</button>
@@ -248,3 +271,86 @@ const LegionRaid = () => {
 };
 
 export default LegionRaid;
+
+
+const ToggleWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px;
+`;
+
+const CheckBox = styled.input`
+  display: none;
+`;
+
+const ToggleSwitch = styled.label`
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background-color: #e5e5e5;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s;
+
+  .toggle-circle {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    border-radius: 20px;
+    transition: transform 0.2s;
+  }
+
+  .checked + .toggle-circle {
+    transform: translateX(100%);
+  }
+`;
+
+
+const ToggleCircle = styled.div`
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: left 0.3s;
+
+  &.checked {
+    left: 50%;
+  }
+`;
+
+const ToggleLabels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 80%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding: 0 5px;
+  align-items: center;
+  pointer-events: none;
+
+  .toggle-left,
+  .toggle-right {
+    font-weight: bold;
+    color: #777;
+    transition: color 0.3s;
+  }
+
+  .toggle-left.active,
+  .toggle-right.active {
+    color: #333;
+  }
+
+  .toggle-left.inactive,
+  .toggle-right.inactive {
+    color: #ccc;
+  }
+`;
