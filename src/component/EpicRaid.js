@@ -52,7 +52,7 @@ const EpicRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      Behemoth: { title: '베히모스 스펙 설정' }
+      Behemoth: { title: '베히모스 스펙' }
     };
 
     const selectedContent = content[tabId];

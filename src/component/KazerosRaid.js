@@ -52,7 +52,7 @@ const KazerosRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      eki: { title: '에키드나 스펙 설정' }
+      eki: { title: '에키드나 스펙' }
     };
 
     const selectedContent = content[tabId];

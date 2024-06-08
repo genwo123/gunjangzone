@@ -53,8 +53,8 @@ const AbyssRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      kayangel: { title: '카양겔 스펙 설정' },
-      ivoryTower: { title: '상아탑 스펙 설정' }
+      kayangel: { title: '카양겔 스펙' },
+      ivoryTower: { title: '상아탑 스펙' }
     };
 
     const selectedContent = content[tabId];
