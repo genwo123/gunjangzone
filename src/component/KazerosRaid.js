@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import '../CSS/RaidStyles.css'
+import '../CSS/RaidStyles.css';
 import ekiImg from '../image/baltan.jpg'; // Placeholder image, replace with actual
 
 const KazerosRaid = () => {
-  const [activeTab, setActiveTab] = useState('eki');
+  const [activeTab, setActiveTab] = useState('eki-default');
   const [selectedOptions, setSelectedOptions] = useState({
     battleLevel: [],
     characteristic: [],
@@ -22,10 +22,9 @@ const KazerosRaid = () => {
   const [showSavePresetModal, setShowSavePresetModal] = useState(false);
   const [showLoadPresetModal, setShowLoadPresetModal] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState(null);
-
   const [isChecked, setIsChecked] = useState(false);
   const left = '기본';
-  const right = '상세';
+  const right = '사용자';
 
   const aliasMap = {
     battleLevel: '전투 레벨',
@@ -46,11 +45,11 @@ const KazerosRaid = () => {
     abilityStone: ['유물', '고대 I', '고대 II', '고대 III', '고대 IV'],
     skillPoint: ['390', '400', '410', '420'],
     engraving: ['3333', '33333', '333331', '333332'],
-    equipmentSetEffect: ['1레벨', '2레벨', '3레벨'],
-    gem: ['5', '7', '9', '10'],
-    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30'],
-    elixir: ['엘릭서0', '엘릭서 35', '엘릭서 40'],
-    transcendence: ['초월 x', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
+    equipmentSetEffect: ['1LV', '2LV', '3LV'],
+    gem: ['5LV', '7LV', '9LV', '10LV'],
+    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '남바절 30', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30', '너다계 18', '너다계 30', '창달 30'],
+    elixir: ['엘릭서 0', '엘릭서 35', '엘릭서 40', '엘릭서 40+'],
+    transcendence: ['초월 X', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
   };
 
   useEffect(() => {
@@ -61,26 +60,55 @@ const KazerosRaid = () => {
   }, [activeTab]);
 
   const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
+    setActiveTab(`${tabId}-default`);
   };
 
   const handleOptionClick = (category, option) => {
-    setSelectedOptions(prevState => {
-      const currentOptions = prevState[category];
-      const isSelected = currentOptions.includes(option);
-      let newOptions = [];
+    if (isChecked) {
+      setSelectedOptions(prevState => {
+        const currentOptions = prevState[category];
+        const isSelected = currentOptions.includes(option);
+        let newOptions = [];
+        if (isSelected) {
+          newOptions = currentOptions.filter(item => item !== option);
+        } else {
+          newOptions = [option];
+        }
+        return { ...prevState, [category]: newOptions };
+      });
+    }
+  };
 
-      if (isSelected) {
-        newOptions = currentOptions.filter(item => item !== option);
+  const handleToggleChange = () => {
+    setIsChecked(prev => {
+      const newChecked = !prev;
+      if (newChecked) {
+        setSelectedOptions({
+          battleLevel: [],
+          characteristic: [],
+          abilityStone: [],
+          skillPoint: [],
+          engraving: [],
+          equipmentSetEffect: [],
+          gem: [],
+          card: [],
+          elixir: [],
+          transcendence: []
+        });
       } else {
-        newOptions = [option];
+        const savedOptions = JSON.parse(localStorage.getItem(activeTab));
+        if (savedOptions) {
+          setSelectedOptions(savedOptions);
+        }
       }
-
-      return { ...prevState, [category]: newOptions };
+      return newChecked;
     });
   };
 
   const handleSave = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 저장하기 버튼이 작동하지 않음
+    }
     setShowSavePresetModal(true);
   };
 
@@ -93,6 +121,9 @@ const KazerosRaid = () => {
   };
 
   const handleReset = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 초기화 버튼이 작동하지 않음
+    }
     setSelectedOptions({
       battleLevel: [],
       characteristic: [],
@@ -113,6 +144,7 @@ const KazerosRaid = () => {
       if (savedOptions) {
         setSelectedOptions(savedOptions);
         setShowLoadPresetModal(false);
+        setIsChecked(true); // 토글을 "사용자"로 변경
       }
     }
   };
@@ -125,7 +157,7 @@ const KazerosRaid = () => {
   };
 
   const renderPresetList = () => {
-    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab));
+    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab) && !key.endsWith('-default'));
     return presetKeys.map(preset => (
       <div key={preset} className="preset-item" onClick={() => setSelectedPreset(preset)}>
         <span>{preset.replace(`${activeTab}-`, '')}</span>
@@ -133,9 +165,10 @@ const KazerosRaid = () => {
     ));
   };
 
+
   const renderTabContent = (tabId) => {
     const content = {
-      eki: { title: '에키드나 스펙' }
+      'eki-default': { title: '에키드나 스펙' }
     };
 
     const selectedContent = content[tabId];
@@ -146,10 +179,10 @@ const KazerosRaid = () => {
         <div className="preset-menu">
           <ToggleWrapper>
             <CheckBox
-                type="checkbox"
-                id="toggle"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
+              type="checkbox"
+              id="toggle"
+              checked={isChecked}
+              onChange={handleToggleChange}
             />
             <ToggleSwitch htmlFor="toggle">
               <ToggleCircle className={isChecked ? 'checked' : ''} />
@@ -197,7 +230,7 @@ const KazerosRaid = () => {
           {Object.keys(options).map(category => (
             <div key={category} className="spec-row">
               <label>{aliasMap[category]}</label>
-              <div className="checkbox-wrapper">
+              <div className={`checkbox-wrapper ${!isChecked ? 'disabled' : ''}`}>
                 {options[category].map(option => (
                   <div key={option} className="checkbox-container">
                     <input
@@ -205,6 +238,8 @@ const KazerosRaid = () => {
                       id={`${category}-${option}`}
                       checked={selectedOptions[category].includes(option)}
                       onChange={() => handleOptionClick(category, option)}
+                      disabled={!isChecked} // 비활성화 설정
+                      className={!isChecked ? 'disabled-checkbox' : ''}
                     />
                     <label
                       htmlFor={`${category}-${option}`}
@@ -220,31 +255,31 @@ const KazerosRaid = () => {
         </div>
       </div>
     );
-  };
-
-  return (
-    <div className="tab-container">
-      <div className="tab-menu">
-        <button onClick={() => handleTabClick('eki')} className={activeTab === 'eki' ? 'active' : ''}>
-          <img src={ekiImg} alt="에키드나" />
-          에키드나
-        </button>
+    };
+    
+    return (
+      <div className="tab-container">
+        <div className="tab-menu">
+          <button onClick={() => handleTabClick('eki')} className={activeTab === 'eki-default' ? 'active' : ''}>
+            <img src={ekiImg} alt="에키드나" />
+            에키드나
+          </button>
+        </div>
+    
+        <div className="tab-content">
+          {renderTabContent(activeTab)}
+        </div>
       </div>
-
-      <div className="tab-content">
-        {renderTabContent(activeTab)}
-      </div>
-    </div>
-  );
-};
-
-export default KazerosRaid
+    );
+    };
+    
+    export default KazerosRaid;
 
 
 const ToggleWrapper = styled.div`
   display: inline-block;
   position: relative;
-  width: 100px;
+  width: 150px;
   height: 40px;
   margin-right: 10px;
 `;

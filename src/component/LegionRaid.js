@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../CSS/RaidStyles.css'
+import '../CSS/RaidStyles.css';
 import baltanImg from '../image/baltan.jpg';
 import biakisImg from '../image/biakis.jpg';
 import kuxseitenImg from '../image/kuxseiten.jpg';
@@ -7,11 +7,10 @@ import avrelshudImg from '../image/avrelshud.jpg';
 import ilyakanImg from '../image/ilyakan.jpg';
 import kameImg from '../image/kame.jpg';
 import styled from 'styled-components';
-import { csvToLocalStorage } from './csvToLocalStorage.js';
 
 
 const LegionRaid = () => {
-  const [activeTab, setActiveTab] = useState('baltan');
+  const [activeTab, setActiveTab] = useState('baltan-default');
   const [selectedOptions, setSelectedOptions] = useState({
     battleLevel: [],
     characteristic: [],
@@ -25,16 +24,14 @@ const LegionRaid = () => {
     transcendence: []
   });
 
-
   const [presetName, setPresetName] = useState('');
   const [showSavePresetModal, setShowSavePresetModal] = useState(false);
   const [showLoadPresetModal, setShowLoadPresetModal] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const left = '기본';
-  const right = '상세';
+  const right = '사용자';
 
-  
   const aliasMap = {
     battleLevel: '전투 레벨',
     characteristic: '특성합',
@@ -54,11 +51,11 @@ const LegionRaid = () => {
     abilityStone: ['유물', '고대 I', '고대 II', '고대 III', '고대 IV'],
     skillPoint: ['390', '400', '410', '420'],
     engraving: ['3333', '33333', '333331', '333332'],
-    equipmentSetEffect: ['1레벨', '2레벨', '3레벨'],
-    gem: ['5', '7', '9', '10'],
-    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30'],
-    elixir: ['엘릭서0', '엘릭서 35', '엘릭서 40'],
-    transcendence: ['초월 x', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
+    equipmentSetEffect: ['1LV', '2LV', '3LV'],
+    gem: ['5LV', '7LV', '9LV', '10LV'],
+    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '남바절 30', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30', '너다계 18', '너다계 30', '창달 30'],
+    elixir: ['엘릭서 0', '엘릭서 35', '엘릭서 40', '엘릭서 40+'],
+    transcendence: ['초월 X', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
   };
 
   useEffect(() => {
@@ -69,24 +66,55 @@ const LegionRaid = () => {
   }, [activeTab]);
 
   const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
+    setActiveTab(`${tabId}-default`);
   };
 
   const handleOptionClick = (category, option) => {
-    setSelectedOptions(prevState => {
-      const currentOptions = prevState[category];
-      const isSelected = currentOptions.includes(option);
-      let newOptions = [];
-      if (isSelected) {
-        newOptions = currentOptions.filter(item => item !== option);
+    if (isChecked) {
+      setSelectedOptions(prevState => {
+        const currentOptions = prevState[category];
+        const isSelected = currentOptions.includes(option);
+        let newOptions = [];
+        if (isSelected) {
+          newOptions = currentOptions.filter(item => item !== option);
+        } else {
+          newOptions = [option];
+        }
+        return { ...prevState, [category]: newOptions };
+      });
+    }
+  };
+
+  const handleToggleChange = () => {
+    setIsChecked(prev => {
+      const newChecked = !prev;
+      if (newChecked) {
+        setSelectedOptions({
+          battleLevel: [],
+          characteristic: [],
+          abilityStone: [],
+          skillPoint: [],
+          engraving: [],
+          equipmentSetEffect: [],
+          gem: [],
+          card: [],
+          elixir: [],
+          transcendence: []
+        });
       } else {
-        newOptions = [option]; // 단일 선택으로 변경
+        const savedOptions = JSON.parse(localStorage.getItem(activeTab));
+        if (savedOptions) {
+          setSelectedOptions(savedOptions);
+        }
       }
-      return { ...prevState, [category]: newOptions };
+      return newChecked;
     });
   };
 
   const handleSave = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 저장하기 버튼이 작동하지 않음
+    }
     setShowSavePresetModal(true);
   };
 
@@ -99,6 +127,9 @@ const LegionRaid = () => {
   };
 
   const handleReset = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 초기화 버튼이 작동하지 않음
+    }
     setSelectedOptions({
       battleLevel: [],
       characteristic: [],
@@ -119,19 +150,20 @@ const LegionRaid = () => {
       if (savedOptions) {
         setSelectedOptions(savedOptions);
         setShowLoadPresetModal(false);
-      } 
-        }
+        setIsChecked(true); // 토글을 "상세"로 변경
+      }
+    }
   };
 
   const deletePreset = () => {
     if (selectedPreset) {
       localStorage.removeItem(selectedPreset);
-      setShowLoadPresetModal(false); // 프리셋 옵션 메뉴를 닫기
+      setShowLoadPresetModal(false);
     }
   };
 
   const renderPresetList = () => {
-    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab));
+    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab) && !key.endsWith('-default'));
     return presetKeys.map(preset => (
       <div key={preset} className="preset-item" onClick={() => setSelectedPreset(preset)}>
         <span>{preset.replace(`${activeTab}-`, '')}</span>
@@ -141,26 +173,27 @@ const LegionRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      baltan: { title: '발탄 스펙' },
-      biakis: { title: '비아키스 스펙' },
-      kuxseiten: { title: '쿠크세이튼 스펙' },
-      avrelshud: { title: '아브렐슈드 스펙' },
-      ilyakan: { title: '일리아칸 스펙' },
-      kame: { title: '카멘 스펙' }
+      'baltan-default': { title: '발탄 스펙' },
+      'biakis-default': { title: '비아키스 스펙' },
+      'kuxseiten-default': { title: '쿠크세이튼 스펙' },
+      'avrelshud-default': { title: '아브렐슈드 스펙' },
+      'ilyakan-default': { title: '일리아칸 스펙' },
+      'kame-default': { title: '카멘 스펙' }
     };
 
     const selectedContent = content[tabId];
+
 
     return (
       <div className="content active">
         <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
-        <ToggleWrapper>
+          <ToggleWrapper>
             <CheckBox
-                type="checkbox"
-                id="toggle"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
+              type="checkbox"
+              id="toggle"
+              checked={isChecked}
+              onChange={handleToggleChange}
             />
             <ToggleSwitch htmlFor="toggle">
               <ToggleCircle className={isChecked ? 'checked' : ''} />
@@ -208,7 +241,7 @@ const LegionRaid = () => {
           {Object.keys(options).map(category => (
             <div key={category} className="spec-row">
               <label>{aliasMap[category]}</label>
-              <div className="checkbox-wrapper">
+              <div className={`checkbox-wrapper ${!isChecked ? 'disabled' : ''}`}>
                 {options[category].map(option => (
                   <div key={option} className="checkbox-container">
                     <input
@@ -216,6 +249,8 @@ const LegionRaid = () => {
                       id={`${category}-${option}`}
                       checked={selectedOptions[category].includes(option)}
                       onChange={() => handleOptionClick(category, option)}
+                      disabled={!isChecked} // 비활성화 설정
+                      className={!isChecked ? 'disabled-checkbox' : ''}
                     />
                     <label
                       htmlFor={`${category}-${option}`}
@@ -231,52 +266,50 @@ const LegionRaid = () => {
         </div>
       </div>
     );
-  };
-
-  return (
-    <div className="tab-container">
-      <div className="tab-menu">
-        <button onClick={() => handleTabClick('baltan')} className={activeTab === 'baltan' ? 'active' : ''}>
-          <img src={baltanImg} alt="발탄" />
-          발탄
-        </button>
-        <button onClick={() => handleTabClick('biakis')} className={activeTab === 'biakis' ? 'active' : ''}>
-          <img src={biakisImg} alt="비아키스" />
-          비아키스
-        </button>
-        <button onClick={() => handleTabClick('kuxseiten')} className={activeTab === 'kuxseiten' ? 'active' : ''}>
-          <img src={kuxseitenImg} alt="쿠크세이튼" />
-          쿠크세이튼
-        </button>
-        <button onClick={() => handleTabClick('avrelshud')} className={activeTab === 'avrelshud' ? 'active' : ''}>
-          <img src={avrelshudImg} alt="아브렐슈드" />
-          아브렐슈드
-        </button>
-        <button onClick={() => handleTabClick('ilyakan')} className={activeTab === 'ilyakan' ? 'active' : ''}>
-          <img src={ilyakanImg} alt="일리아칸" />
-          일리아칸
-        </button>
-        <button onClick={() => handleTabClick('kame')} className={activeTab === 'kame' ? 'active' : ''}>
-          <img src={kameImg} alt="카멘" />
-          카멘
-        </button>
-
+    };
+    
+    return (
+      <div className="tab-container">
+        <div className="tab-menu">
+          <button onClick={() => handleTabClick('baltan')} className={activeTab === 'baltan-default' ? 'active' : ''}>
+            <img src={baltanImg} alt="발탄" />
+            발탄
+          </button>
+          <button onClick={() => handleTabClick('biakis')} className={activeTab === 'biakis-default' ? 'active' : ''}>
+            <img src={biakisImg} alt="비아키스" />
+            비아키스
+          </button>
+          <button onClick={() => handleTabClick('kuxseiten')} className={activeTab === 'kuxseiten-default' ? 'active' : ''}>
+            <img src={kuxseitenImg} alt="쿠크세이튼" />
+            쿠크세이튼
+          </button>
+          <button onClick={() => handleTabClick('avrelshud')} className={activeTab === 'avrelshud-default' ? 'active' : ''}>
+            <img src={avrelshudImg} alt="아브렐슈드" />
+            아브렐슈드
+          </button>
+          <button onClick={() => handleTabClick('ilyakan')} className={activeTab === 'ilyakan-default' ? 'active' : ''}>
+            <img src={ilyakanImg} alt="일리아칸" />
+            일리아칸
+          </button>
+          <button onClick={() => handleTabClick('kame')} className={activeTab === 'kame-default' ? 'active' : ''}>
+            <img src={kameImg} alt="카멘" />
+            카멘
+          </button>
+        </div>
+    
+        <div className="tab-content">
+          {renderTabContent(activeTab)}
+        </div>
       </div>
-
-      <div className="tab-content">
-        {renderTabContent(activeTab)}
-      </div>
-    </div>
-  );
-};
-
-export default LegionRaid;
-
+    );
+    };
+    
+    export default LegionRaid;
 
 const ToggleWrapper = styled.div`
   display: inline-block;
   position: relative;
-  width: 100px;
+  width: 150px;
   height: 40px;
   margin-right: 10px;
 `;

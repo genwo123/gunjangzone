@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/RaidStyles.css'
 import kayangelImg from '../image/baltan.jpg';
-import ivoryTowerImg from '../image/biakis.jpg';
+import ivorytowerImg from '../image/biakis.jpg';
 import styled from 'styled-components';
 
-
 const AbyssRaid = () => {
-  const [activeTab, setActiveTab] = useState('kayangel');
+  const [activeTab, setActiveTab] = useState('kayangel-default');
   const [selectedOptions, setSelectedOptions] = useState({
     battleLevel: [],
     characteristic: [],
@@ -24,11 +23,10 @@ const AbyssRaid = () => {
   const [showSavePresetModal, setShowSavePresetModal] = useState(false);
   const [showLoadPresetModal, setShowLoadPresetModal] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState(null);
-
   const [isChecked, setIsChecked] = useState(false);
   const left = '기본';
-  const right = '상세';
-  
+  const right = '사용자';
+
   const aliasMap = {
     battleLevel: '전투 레벨',
     characteristic: '특성합',
@@ -48,11 +46,11 @@ const AbyssRaid = () => {
     abilityStone: ['유물', '고대 I', '고대 II', '고대 III', '고대 IV'],
     skillPoint: ['390', '400', '410', '420'],
     engraving: ['3333', '33333', '333331', '333332'],
-    equipmentSetEffect: ['1레벨', '2레벨', '3레벨'],
-    gem: ['5', '7', '9', '10'],
-    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30'],
-    elixir: ['엘릭서0', '엘릭서 35', '엘릭서 40'],
-    transcendence: ['초월 x', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
+    equipmentSetEffect: ['1LV', '2LV', '3LV'],
+    gem: ['5LV', '7LV', '9LV', '10LV'],
+    card: ['알고보면 12', '알고보면 18', '알고보면 30', '남바절 12', '남바절 30', '세구빛 12', '세구빛 18', '세구빛 30', '암구빛 12', '암구빛 18', '암구빛 30', '너다계 18', '너다계 30', '창달 30'],
+    elixir: ['엘릭서 0', '엘릭서 35', '엘릭서 40', '엘릭서 40+'],
+    transcendence: ['초월 X', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
   };
 
   useEffect(() => {
@@ -63,26 +61,59 @@ const AbyssRaid = () => {
   }, [activeTab]);
 
   const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
+    setActiveTab(`${tabId}-default`);
   };
 
   const handleOptionClick = (category, option) => {
-    setSelectedOptions(prevState => {
-      const currentOptions = prevState[category];
-      const isSelected = currentOptions.includes(option);
-      let newOptions = [];
-      if (isSelected) {
-        newOptions = currentOptions.filter(item => item !== option);
-      } else {
-        newOptions = [option];
-      }
-      return { ...prevState, [category]: newOptions };
-    });
+    if (isChecked) {
+      setSelectedOptions(prevState => {
+        const currentOptions = prevState[category];
+        const isSelected = currentOptions.includes(option);
+        let newOptions = [];
+        if (isSelected) {
+          newOptions = currentOptions.filter(item => item !== option);
+        } else {
+          newOptions = [option];
+        }
+        return { ...prevState, [category]: newOptions };
+      });
+    }
   };
 
+  const handleToggleChange = () => {
+    setIsChecked(prev => {
+      const newChecked = !prev;
+      if (newChecked) {
+        setSelectedOptions({
+          battleLevel: [],
+          characteristic: [],
+          abilityStone: [],
+          skillPoint: [],
+          engraving: [],
+          equipmentSetEffect: [],
+          gem: [],
+          card: [],
+          elixir: [],
+          transcendence: []
+        });
+      } else {
+        const savedOptions = JSON.parse(localStorage.getItem(activeTab));
+        if (savedOptions) {
+          setSelectedOptions(savedOptions);
+        }
+      }
+      return newChecked;
+    });
+  };
+  
+
   const handleSave = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 저장하기 버튼이 작동하지 않음
+    }
     setShowSavePresetModal(true);
   };
+  
 
   const savePreset = () => {
     if (presetName.trim() === '') {
@@ -93,6 +124,9 @@ const AbyssRaid = () => {
   };
 
   const handleReset = () => {
+    if (!isChecked) {
+      return; // 기본 모드일 때는 초기화 버튼이 작동하지 않음
+    }
     setSelectedOptions({
       battleLevel: [],
       characteristic: [],
@@ -113,9 +147,11 @@ const AbyssRaid = () => {
       if (savedOptions) {
         setSelectedOptions(savedOptions);
         setShowLoadPresetModal(false);
+        setIsChecked(true); // 토글을 "상세"로 변경
       }
     }
   };
+  
 
   const deletePreset = () => {
     if (selectedPreset) {
@@ -125,7 +161,7 @@ const AbyssRaid = () => {
   };
 
   const renderPresetList = () => {
-    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab));
+    const presetKeys = Object.keys(localStorage).filter(key => key.startsWith(activeTab) && !key.endsWith('-default'));
     return presetKeys.map(preset => (
       <div key={preset} className="preset-item" onClick={() => setSelectedPreset(preset)}>
         <span>{preset.replace(`${activeTab}-`, '')}</span>
@@ -135,8 +171,8 @@ const AbyssRaid = () => {
 
   const renderTabContent = (tabId) => {
     const content = {
-      kayangel: { title: '카양겔 스펙' },
-      ivoryTower: { title: '상아탑 스펙' }
+      'kayangel-default': { title: '카양겔 스펙' },
+      'ivorytower-default': { title: '상아탑 스펙' }
     };
 
     const selectedContent = content[tabId];
@@ -145,12 +181,12 @@ const AbyssRaid = () => {
       <div className="content active">
         <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
-        <ToggleWrapper>
+          <ToggleWrapper>
             <CheckBox
-                type="checkbox"
-                id="toggle"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
+              type="checkbox"
+              id="toggle"
+              checked={isChecked}
+              onChange={handleToggleChange}
             />
             <ToggleSwitch htmlFor="toggle">
               <ToggleCircle className={isChecked ? 'checked' : ''} />
@@ -198,14 +234,16 @@ const AbyssRaid = () => {
           {Object.keys(options).map(category => (
             <div key={category} className="spec-row">
               <label>{aliasMap[category]}</label>
-              <div className="checkbox-wrapper">
+              <div className={`checkbox-wrapper ${!isChecked ? 'disabled' : ''}`}>
                 {options[category].map(option => (
                   <div key={option} className="checkbox-container">
                     <input
-                      type="checkbox"
-                      id={`${category}-${option}`}
-                      checked={selectedOptions[category].includes(option)}
-                      onChange={() => handleOptionClick(category, option)}
+                    type="checkbox"
+                    id={`${category}-${option}`}
+                    checked={selectedOptions[category].includes(option)}
+                    onChange={() => handleOptionClick(category, option)}
+                    disabled={!isChecked} // 비활성화 설정
+                    className={!isChecked ? 'disabled-checkbox' : ''}
                     />
                     <label
                       htmlFor={`${category}-${option}`}
@@ -217,8 +255,10 @@ const AbyssRaid = () => {
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+
+  ))}
+</div>
+
       </div>
     );
   };
@@ -230,8 +270,8 @@ const AbyssRaid = () => {
           <img src={kayangelImg} alt="카양겔" />
           카양겔
         </button>
-        <button onClick={() => handleTabClick('ivoryTower')} className={activeTab === 'ivoryTower' ? 'active' : ''}>
-          <img src={ivoryTowerImg} alt="상아탑" />
+        <button onClick={() => handleTabClick('ivorytower')} className={activeTab === 'ivorytower' ? 'active' : ''}>
+          <img src={ivorytowerImg} alt="상아탑" />
           상아탑
         </button>
       </div>
@@ -249,7 +289,7 @@ export default AbyssRaid;
 const ToggleWrapper = styled.div`
   display: inline-block;
   position: relative;
-  width: 100px;
+  width: 150px;
   height: 40px;
   margin-right: 10px;
 `;
