@@ -3,7 +3,7 @@ import '../CSS/Header.css'; // 헤더 스타일 파일을 import
 import logo from '../image/GJZ_ICON.png';
 import UpdateLog from './UpdateLog'; // UpdateLog 컴포넌트 import
 
-const Header = () => {
+const Header = ({ setApiMode }) => {
   const [apiInput, setApiInput] = useState(''); // API 입력 상태 추가
   const [isApiInputActive, setIsApiInputActive] = useState(false); // API 입력창 활성화 여부 상태 추가
   const [isUpdateLogOpen, setIsUpdateLogOpen] = useState(false); // 업데이트 로그 모달 상태 추가
@@ -19,6 +19,9 @@ const Header = () => {
   const toggleApiInput = () => {
     if (isApiInputActive && apiInput) {
       localStorage.setItem('API-User', apiInput);
+      setApiMode(true);
+    } else {
+      setApiMode(false);
     }
     setIsApiInputActive(!isApiInputActive); // 버튼을 누를 때마다 API 입력창 활성화 상태 토글
   };
@@ -40,11 +43,8 @@ const Header = () => {
 
   return (
     <div className="header-container">
-      
       <img src={logo} alt="조 명" className="logo" />
       <h2>군장존</h2>
-
-
       <div className="button-container"> {/* 버튼 및 입력창을 포함하는 컨테이너 */}
         <button className="GuideBtn" onClick={handleDownload}>가이드북</button>
         <button className="LogBtn" onClick={toggleUpdateLog}>업데이트 로그</button>

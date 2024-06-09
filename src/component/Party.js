@@ -1,55 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { fetchPartyProfiles } from './apiService';
 import '../CSS/Party.css';
 
-const dummyData = [
-  {
-    nickname: "유저1",
-    class: "배틀마스터",
-    position: "딜러",
-    pass: "O"
-  },
-  {
-    nickname: "유저2",
-    class: "소서리스",
-    position: "딜러",
-    pass: "X"
-  },
-  {
-    nickname: "유저3",
-    class: "기공사",
-    position: "딜러",
-    pass: "O"
-  },
-  {
-    nickname: "유저4",
-    class: "워로드",
-    position: "딜러",
-    pass: "X"
-  },
-  {
-    nickname: "유저5",
-    class: "블레이드",
-    position: "딜러",
-    pass: "O"
-  },
-  {
-    nickname: "유저6",
-    class: "홀리나이트",
-    position: "서포터",
-    pass: "X"
-  },
-  {
-    nickname: "유저7",
-    class: "홀리나이트",
-    position: "서포터",
-    pass: "O"
-  },
-  {
-    nickname: "유저8",
-    class: "바드",
-    position: "서포터",
-    pass: "X"
-  }
+const partyMembers = [
+  "빛쟁인거니",
+  "김실순",
+  "YWKAS",
+  "은빛물결호수",
+  "뚜띠될거니",
 ];
 
 const synergyData = {
@@ -61,28 +19,41 @@ const synergyData = {
   "치명타 피해량 증가": ["창술사"]
 };
 
-const Party = () => {
-  const [id, setId] = useState([]);
+const Party = ({ selectedOptions }) => {
+  const [profiles, setProfiles] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setId(dummyData);
-  }, []);
+    const loadProfiles = async () => {
+      try {
+        const data = await fetchPartyProfiles(partyMembers);
+        setProfiles(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    loadProfiles();
+  }, [selectedOptions]);
 
   const renderRows = () => {
-    return id.map((member, index) => {
+    return profiles.map((profile, index) => {
       const synergyList = Object.keys(synergyData).reduce((acc, key) => {
-        if (synergyData[key].includes(member.class)) {
+        if (synergyData[key].includes(profile.CharacterClassName)) {
           acc.push(key);
         }
         return acc;
       }, []).join(', ');
-      
+
+      const passStatus = determinePassStatus(profile, selectedOptions);
+      const position = isSupportClass(profile.CharacterClassName) ? "서포터" : "딜러";
+
       return (
         <tr key={index}>
-          <td>{member.nickname}</td>
-          <td>{member.class}</td>
-          <td>{member.position}</td>
-          <td>{member.pass}</td>
+          <td>{profile.CharacterName}</td>
+          <td>{profile.CharacterClassName}</td>
+          <td>{position}</td>
+          <td>{passStatus}</td>
           <td>{synergyList}</td>
         </tr>
       );
@@ -92,6 +63,7 @@ const Party = () => {
   return (
     <div className="party-container">
       <h2>군장 검사</h2>
+      {error && <p className="error">{error}</p>}
       <table>
         <thead>
           <tr>
@@ -111,3 +83,53 @@ const Party = () => {
 }
 
 export default Party;
+
+const determinePassStatus = (profile, selectedOptions) => {
+  if (!selectedOptions) {
+    console.error('selectedOptions is undefined');
+    return "X";
+  }
+
+  const {
+    battleLevel = [],
+    skillPoint = [],
+    gem = [],
+    characteristic = [],
+    abilityStone = [],
+    engraving = [],
+    equipmentSetEffect = [],
+    card = [],
+    elixir = [],
+    transcendence = []
+  } = selectedOptions;
+
+  const totalCharacteristic = profile.totalCharacteristic;
+  const battleLevelCondition = battleLevel.some(level => profile.CharacterLevel >= parseInt(level));
+  const skillPointCondition = skillPoint.some(point => profile.TotalSkillPoint >= parseInt(point));
+  const gemCondition = gem.some(level => profile.Gem && profile.Gem.includes(level));
+  const characteristicCondition = characteristic.some(value => totalCharacteristic >= parseInt(value.replace(' 이상', '')));
+  const abilityStoneCondition = abilityStone.includes(profile.AbilityStone);
+  const engravingCondition = engraving.some(engr => profile.Engraving && profile.Engraving.includes(engr));
+  const equipmentSetEffectCondition = equipmentSetEffect.includes(profile.EquipmentSetEffect);
+  const cardCondition = card.includes(profile.Card);
+  const elixirCondition = elixir.includes(profile.Elixir);
+  const transcendenceCondition = transcendence.includes(profile.Transcendence);
+
+  return (
+    battleLevelCondition &&
+    skillPointCondition &&
+    gemCondition &&
+    characteristicCondition &&
+    abilityStoneCondition &&
+    engravingCondition &&
+    equipmentSetEffectCondition &&
+    cardCondition &&
+    elixirCondition &&
+    transcendenceCondition
+  ) ? "O" : "X";
+};
+
+const isSupportClass = (characterClass) => {
+  const supportClasses = ["홀리나이트", "바드", "도화가"];
+  return supportClasses.includes(characterClass);
+};

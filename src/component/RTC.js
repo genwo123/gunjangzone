@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import adapter from 'webrtc-adapter'; // webrtc-adapter를 import 합니다.
-import '../CSS/RTC.css'; // 스타일 파일을 import 합니다.
+import adapter from 'webrtc-adapter';
+import '../CSS/RTC.css';
+import { fetchPartyProfiles } from './apiService.js';
+import Party from './Party';
 
 const RTC = () => {
   const [isSharing, setIsSharing] = useState(false);
   const [error, setError] = useState('');
+  const [profileData, setProfileData] = useState([]);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -38,7 +41,7 @@ const RTC = () => {
   };
 
   const startSharing = () => {
-    const options = { audio: true, video: true }; // 기본 화면 공유 옵션
+    const options = { audio: true, video: true };
 
     navigator.mediaDevices.getDisplayMedia(options)
       .then(handleSuccess)
@@ -98,7 +101,7 @@ const RTC = () => {
           {isSharing ? '캡처 중지' : '캡처 시작'}
         </button>
         <button className="adjust-position-button">위치 조정</button>
-      </div>  
+        </div>  
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline className="rtc-video"></video>
         <canvas
@@ -111,7 +114,7 @@ const RTC = () => {
       </div>
 
       {error && <div id="errorMsg">{error}</div>}
-    </div>
+      </div>
   );
 };
 
