@@ -10,6 +10,16 @@ jobs:
       - name: Checkout source code. # Repo checkout
         uses: actions/checkout@v2
 
+      - name: Cache node modules # Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            **/yarn.lock
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
       - name: Check Node v # Node v 확인
         run: node -v
 
