@@ -3,8 +3,7 @@ import './App.css';
 import Body from './component/Body';
 import Header from './component/Header';
 import Footer from './component/Footer';
-import { initializeLocalStorage } from '../src/component/initializeLocalStorage';
-import Party from './component/Party';
+import { initializeLocalStorage } from '../src/component/initializeLocalStorage.js';
 
 function App() {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -20,15 +19,16 @@ function App() {
     transcendence: ['초월 X', '초월 25', '초월 50', '초월 75', '초월 100', '초월 125']
   });
 
+  const [apiMode, setApiMode] = useState(false);
+
   useEffect(() => {
     initializeLocalStorage();
   }, []);
 
   return (
     <div className="App">
-      <Header />
-      <Body />
-      <Party selectedOptions={selectedOptions} />
+      <Header setApiMode={setApiMode} />
+      <Body selectedOptions={selectedOptions} apiMode={apiMode} />
       <Footer />
     </div>
   );

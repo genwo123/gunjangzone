@@ -8,6 +8,9 @@ const partyMembers = [
   "YWKAS",
   "은빛물결호수",
   "뚜띠될거니",
+  "남실순",
+  "쁘허될거니",
+  "우기시치",
 ];
 
 const synergyData = {
@@ -16,10 +19,11 @@ const synergyData = {
   "공격력 증가": ["기공사", "스카우터", "홀리나이트", "바드", "도화가"],
   "방어력 감소": ["워로드", "서머너", "블래스터", "디스트로이어", "리퍼"],
   "백헤드 피해 증가": ["워로드", "블레이드"],
-  "치명타 피해량 증가": ["창술사"]
+  "치명타 피해량 증가": ["창술사"],
+  "낙인":["바드","홀리나이트","도화가"],
 };
 
-const Party = ({ selectedOptions }) => {
+const Party = ({ selectedOptions, apiMode }) => {
   const [profiles, setProfiles] = useState([]);
   const [error, setError] = useState(null);
 
@@ -36,6 +40,11 @@ const Party = ({ selectedOptions }) => {
     loadProfiles();
   }, [selectedOptions]);
 
+  if (!selectedOptions) {
+    console.error('selectedOptions is undefined');
+    return null;
+  }
+
   const renderRows = () => {
     return profiles.map((profile, index) => {
       const synergyList = Object.keys(synergyData).reduce((acc, key) => {
@@ -44,8 +53,8 @@ const Party = ({ selectedOptions }) => {
         }
         return acc;
       }, []).join(', ');
-
-      const passStatus = determinePassStatus(profile, selectedOptions);
+      const passStatus = index % 3 === 0 ? "O" : "X";
+      //const passStatus = determinePassStatus(profile, selectedOptions);
       const position = isSupportClass(profile.CharacterClassName) ? "서포터" : "딜러";
 
       return (
@@ -80,7 +89,7 @@ const Party = ({ selectedOptions }) => {
       </table>
     </div>
   );
-}
+};
 
 export default Party;
 

@@ -26,7 +26,6 @@ export async function runOCR(canvasRef, outputRef) {
             ctx.drawImage(canvas, startX, startY, width, height, 0, 0, width, height);
 
             const { data: { text } } = await Tesseract.recognize(croppedCanvas, 'kor+eng', {
-                logger: m => console.log(m),
                 tessedit_char_whitelist: '가-힣a-zA-Z0-9'
             });
 
@@ -37,6 +36,6 @@ export async function runOCR(canvasRef, outputRef) {
         }
     }
 
-    outputText.innerHTML = ''; // 텍스트 인식 완료 후 메시지 지움
+    outputText.innerHTML = '텍스트 인식 완료'; // 텍스트 인식 완료 후 메시지 지움
     return results;
 }
