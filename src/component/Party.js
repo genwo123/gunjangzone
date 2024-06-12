@@ -40,10 +40,7 @@ const Party = ({ selectedOptions, apiMode }) => {
     loadProfiles();
   }, [selectedOptions]);
 
-  if (!selectedOptions) {
-    console.error('selectedOptions is undefined');
-    return null;
-  }
+
 
   const renderRows = () => {
     return profiles.map((profile, index) => {
@@ -64,7 +61,9 @@ const Party = ({ selectedOptions, apiMode }) => {
           <td>{position}</td>
           <td>{passStatus}</td>
           <td>{synergyList}</td>
+          <p>{determinePassStatus}</p>
         </tr>
+        
       );
     });
   };
