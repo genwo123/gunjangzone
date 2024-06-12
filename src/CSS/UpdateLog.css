@@ -1,0 +1,57 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+  
+.modal-content {
+    background-color: #fff;
+    color: #000;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    height: 70%;
+    overflow-y: auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+  
+.close-button {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: right;
+}
+  
+.log-entries {
+    margin-top: 20px;
+}
+  
+.log-entry {
+    margin-bottom: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ccc; /* 희미한 구분선을 추가 */
+    padding-bottom: 10px; /* 구분선과 텍스트 사이의 간격 */
+}
+  
+.log-entry strong {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 15px;
+}
+  
+.log-entry p {
+    margin: 0;
+    font-size: 12px;
+    white-space: pre-wrap;
+}

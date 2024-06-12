@@ -1,14 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import adapter from 'webrtc-adapter'; // webrtc-adapter를 import 합니다.
-import '../CSS/RTC.css'; // 스타일 파일을 import 합니다.
+import adapter from 'webrtc-adapter';
+import '../CSS/RTC.css';
+import { captureScreen } from './OCR/CaptureScreen';
+import { runOCR } from './OCR/OCR';
+import { fetchPartyProfiles } from './apiService.js';
+import Party from './Party';
 
-const RTC = () => {
+const RTC = ({ onTextExtracted }) => {
   const [isSharing, setIsSharing] = useState(false);
   const [error, setError] = useState('');
+  const [profileData, setProfileData] = useState([]);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const outputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [selection, setSelection] = useState({ startX: 0, startY: 0, width: 0, height: 0 });
+  const [extractedText, setExtractedText] = useState([]);
+  const [canvasDimensions, setCanvasDimensions] = useState({ width: '0', maxWidth: '0', display: 'none' });
 
   useEffect(() => {
     if (adapter.browserDetails.browser === 'firefox') {
@@ -38,7 +46,7 @@ const RTC = () => {
   };
 
   const startSharing = () => {
-    const options = { audio: true, video: true }; // 기본 화면 공유 옵션
+    const options = { audio: true, video: true };
 
     navigator.mediaDevices.getDisplayMedia(options)
       .then(handleSuccess)
@@ -80,6 +88,14 @@ const RTC = () => {
     setIsDragging(false);
   };
 
+  const handleOCR = async () => {
+    const result = await runOCR(canvasRef, outputRef);
+    setExtractedText(result);
+    if (onTextExtracted) {
+      onTextExtracted(result);
+    }
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -94,13 +110,12 @@ const RTC = () => {
   return (
     <div className="rtc-container">
       <div className="top-buttons">
-        <button id="toggleButton" onClick={toggleSharing}>
-          {isSharing ? '캡처 중지' : '캡처 시작'}
+      <button id="toggleButton" onClick={toggleSharing}>
+          {isSharing ? '공유 중지' : '공유 시작'}
         </button>
-        <button className="adjust-position-button">위치 조정</button>
-        <button className="settings-button">설정</button>
-        <button className="performance-button">성능표</button>
-      </div>  
+        <button className="adjust-position-button" onClick={() => captureScreen(videoRef, canvasRef, setCanvasDimensions)}>캡쳐</button>
+        <button className='extraction-nickname' onClick={handleOCR}>닉네임 추출</button>
+        </div>  
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline className="rtc-video"></video>
         <canvas
@@ -109,11 +124,19 @@ const RTC = () => {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          style={canvasDimensions} // 캔버스 스타일 업데이트
         ></canvas>
+
+      </div>
+      <div ref={outputRef} id="outputText" className="output-text"></div>
+      <div className="extracted-text-container">
+        {extractedText.map((text, index) => (
+          <p key={index}>{text}</p>
+        ))}
       </div>
 
       {error && <div id="errorMsg">{error}</div>}
-    </div>
+      </div>
   );
 };
 
