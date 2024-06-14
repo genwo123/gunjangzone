@@ -70,12 +70,12 @@
     font-size: 16px;
     margin-bottom: 10px;
   }
-  
+
+  /* 흰색 배경 제거 */
   .checkbox-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    background-color: white;
     border-radius: 9px;
   }
   
