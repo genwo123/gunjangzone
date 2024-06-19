@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/RaidStyles.css'
-import kayangelImg from '../image/baltan.jpg';
-import ivorytowerImg from '../image/biakis.jpg';
+import kayangelImg from '../image/Lauriel.png';
+import ivorytowerImg from '../image/Rajaram.png';
 import styled from 'styled-components';
 
 const AbyssRaid = () => {
@@ -189,7 +189,6 @@ const AbyssRaid = () => {
 
     return (
       <div className="content active">
-        <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
           <ToggleWrapper>
             <CheckBox
@@ -277,11 +276,11 @@ const AbyssRaid = () => {
     <div className="tab-container">
       <div className="tab-menu">
         <button onClick={() => handleTabClick('kayangel')} className={activeTab === 'kayangel' ? 'active' : ''}>
-          <img src={kayangelImg} alt="카양겔" />
+          <img src={kayangelImg} alt="카양겔" className='RaidImg' />
           카양겔
         </button>
         <button onClick={() => handleTabClick('ivorytower')} className={activeTab === 'ivorytower' ? 'active' : ''}>
-          <img src={ivorytowerImg} alt="상아탑" />
+          <img src={ivorytowerImg} alt="상아탑" className='RaidImg' />
           상아탑
         </button>
       </div>

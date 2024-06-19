@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/RaidStyles.css';
-import baltanImg from '../image/baltan.jpg';
-import biakisImg from '../image/biakis.jpg';
-import kuxseitenImg from '../image/kuxseiten.jpg';
-import avrelshudImg from '../image/avrelshud.jpg';
-import ilyakanImg from '../image/ilyakan.jpg';
-import kameImg from '../image/kame.jpg';
+import baltanImg from '../image/baltan.png';
+import biakisImg from '../image/biakis.png';
+import kuxseitenImg from '../image/kuxseiten.png';
+import avrelshudImg from '../image/avrelshud.png';
+import ilyakanImg from '../image/ilyakan.png';
+import kameImg from '../image/kame.png';
 import styled from 'styled-components';
 
 
@@ -197,7 +197,6 @@ const LegionRaid = () => {
 
     return (
       <div className="content active">
-        <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
           <ToggleWrapper>
             <CheckBox
@@ -214,8 +213,8 @@ const LegionRaid = () => {
               <span className={`toggle-right ${isChecked ? 'active' : 'inactive'}`}>{right}</span>
             </ToggleLabels>
           </ToggleWrapper>
-          <button onClick={handleReset}>초기화</button>
           <div className="preset-dropdown">
+          <button onClick={handleReset}>초기화</button>
             <button onClick={() => setShowLoadPresetModal(true)}>불러오기</button>
             <button onClick={handleSave}>저장하기</button>
           </div>
@@ -283,11 +282,11 @@ const LegionRaid = () => {
       <div className="tab-container">
         <div className="tab-menu">
           <button onClick={() => handleTabClick('baltan')} className={activeTab === 'baltan-default' ? 'active' : ''}>
-            <img src={baltanImg} alt="발탄" />
+            <img src={baltanImg} alt="발탄" className='RaidImg' />
             발탄
           </button>
           <button onClick={() => handleTabClick('biakis')} className={activeTab === 'biakis-default' ? 'active' : ''}>
-            <img src={biakisImg} alt="비아키스" />
+            <img src={biakisImg} alt="비아키스" className='RaidImg' />
             비아키스
           </button>
           <button onClick={() => handleTabClick('kuxseiten')} className={activeTab === 'kuxseiten-default' ? 'active' : ''}>
@@ -295,15 +294,15 @@ const LegionRaid = () => {
             쿠크세이튼
           </button>
           <button onClick={() => handleTabClick('avrelshud')} className={activeTab === 'avrelshud-default' ? 'active' : ''}>
-            <img src={avrelshudImg} alt="아브렐슈드" />
+            <img src={avrelshudImg} alt="아브렐슈드" className='RaidImg' />
             아브렐슈드
           </button>
           <button onClick={() => handleTabClick('ilyakan')} className={activeTab === 'ilyakan-default' ? 'active' : ''}>
-            <img src={ilyakanImg} alt="일리아칸" />
+            <img src={ilyakanImg} alt="일리아칸"  className='RaidImg'/>
             일리아칸
           </button>
           <button onClick={() => handleTabClick('kame')} className={activeTab === 'kame-default' ? 'active' : ''}>
-            <img src={kameImg} alt="카멘" />
+            <img src={kameImg} alt="카멘" className='RaidImg' />
             카멘
           </button>
         </div>

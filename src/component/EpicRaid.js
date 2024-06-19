@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/RaidStyles.css';
-import BehemothImg from '../image/biakis.jpg'; // 이미지 파일 경로를 맞게 수정하세요.
+import BehemothImg from '../image/behemoth.png'; // 이미지 파일 경로를 맞게 수정하세요.
 import styled from 'styled-components';
 
 const EpicRaid = () => {
@@ -185,7 +185,6 @@ const EpicRaid = () => {
 
     return (
       <div className="content active">
-        <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
           <ToggleWrapper>
             <CheckBox
@@ -271,7 +270,7 @@ const EpicRaid = () => {
       <div className="tab-container">
         <div className="tab-menu">
           <button onClick={() => handleTabClick('Behemoth')} className={activeTab === 'Behemoth-default' ? 'active' : ''}>
-            <img src={BehemothImg} alt="베히모스" />
+            <img src={BehemothImg} alt="베히모스" className='RaidImg' />
             베히모스
           </button>
         </div>

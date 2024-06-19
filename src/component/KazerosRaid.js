@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import '../CSS/RaidStyles.css';
-import ekiImg from '../image/baltan.jpg'; // Placeholder image, replace with actual
+import ekiImg from '../image/echidna.png'; // Placeholder image, replace with actual
 
 const KazerosRaid = () => {
   const [activeTab, setActiveTab] = useState('eki-default');
@@ -186,7 +186,6 @@ const KazerosRaid = () => {
 
     return (
       <div className="content active">
-        <h2>{selectedContent.title}</h2>
         <div className="preset-menu">
           <ToggleWrapper>
             <CheckBox
@@ -272,7 +271,7 @@ const KazerosRaid = () => {
       <div className="tab-container">
         <div className="tab-menu">
           <button onClick={() => handleTabClick('eki')} className={activeTab === 'eki-default' ? 'active' : ''}>
-            <img src={ekiImg} alt="에키드나" />
+            <img src={ekiImg} alt="에키드나" className='RaidImg' />
             에키드나
           </button>
         </div>
