@@ -1,71 +1,60 @@
-# Getting Started with Create React App
+# RPG Inspection - Lost Ark 스펙 검사기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 프로젝트 소개
+Lost Ark 레이드 파티 구성 시 발생하는 스펙 확인의 불편함을 해소하기 위한 웹 기반 스펙 검사 도구입니다.
 
-## Available Scripts
+## 🎯 스펙의 기준
+<div align="center">
+  <img src="./image/군장존1.jpg" alt="스펙 기준1" width="800"/>
+  <img src="./image/군장존2.jpg" alt="스펙 기준2" width="800"/>
+  <img src="./image/군장존3.jpg" alt="스펙 기준3" width="800"/>
+  <img src="./image/군장존4.jpg" alt="스펙 기준4" width="800"/>
+  <img src="./image/군장존5.jpg" alt="스펙 기준5" width="800"/>
+  <img src="./image/군장존6.jpg" alt="스펙 기준6" width="800"/>
+</div>
 
-In the project directory, you can run:
+## 📊 스펙 확인 방법
+<div align="center">
+  <img src="./image/군장존7.jpg" alt="스펙 확인1" width="800"/>
+  <img src="./image/군장존8.jpg" alt="스펙 확인2" width="800"/>
+  <img src="./image/군장존9.jpg" alt="스펙 확인3" width="800"/>
+</div>
 
-### `npm start`
+## 👥 고인물과 뉴비의 경험 차이
+<div align="center">
+  <img src="./image/군장존10.jpg" alt="경험차이1" width="800"/>
+  <img src="./image/군장존11.jpg" alt="경험차이2" width="800"/>
+  <img src="./image/군장존12.jpg" alt="경험차이3" width="800"/>
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 💻 실제 사용 화면
+<div align="center">
+  <img src="./image/군장존13.jpg" alt="실제 화면" width="800"/>
+</div>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🔒 보완 사항
+<div align="center">
+  <img src="./image/군장존14.jpg" alt="보완사항" width="800"/>
+</div>
 
-### `npm test`
+### 차단 유저 필터링 시스템
+- Lost Ark API 연동을 통한 유저 정보 자동 불러오기
+- 차단 목록 캡처를 통한 자동 검별 시스템
+- 파티 매칭 시 차단된 유저 자동 필터링
+- 원정대 단위의 부캐릭터 확인 기능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🎮 결론
+<div align="center">
+  <img src="./image/군장존15.jpg" alt="결론" width="800"/>
+</div>
 
-### `npm run build`
+당신도 할 수 있습니다! 더 나은 레이드 경험을 위한 첫 걸음을 시작하세요.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠 기술 스택
+- **Frontend**: React.js
+- **API 연동**: Lost Ark Open API
+- **이미지 처리**: OCR API
+- **배포**: Docker, AWS
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-"# front" 
+## 🤝 기여하기
+이 프로젝트는 실제 게임 플레이어의 경험 개선을 위해 시작되었으며, 커뮤니티의 기여를 환영합니다.
